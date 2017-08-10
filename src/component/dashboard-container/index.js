@@ -2,20 +2,29 @@ import React from 'react';
 //binds our store to our components from react-redux - this allows us to grab parts of state and pass it to our components through dispatch.
 import { connect } from 'react-redux';
 import {
-  categoryCreate,
-  categoryUpdate,
-  categoryDelete,
+  categoryCreate as categoryActionCreate
 } from '../../action/category-actions.js';
 
+//output from our action creator named categoryCreate:
+  //  {
+//   type: 'CATEGORY_CREATE',
+//   payload: ({
+//     title: 'cool',
+//     id: uuid()
+//     timestamp: new Date(),
+//   })
+// }
+
+
+import CategoryItem from '../category-item/index.js'
 import CategoryForm from '../category-form/index.js';
 
 class DashboardContainer extends React.Component {
 
   componentDidMount () {
-      this.props.categoryCreate({ title: 'cool beans' }),
-      this.props.categoryCreate({ title: 'brap' }),
-      this.props.categoryCreate({ title: 'blap' }),
-      this.props.categoryCreate({ title: 'bink' })
+      // this.props.categoryCreate({ title: 'cool beans' }),
+      // this.props.categoryCreate({ title: 'brap' }),
+      // this.props.categoryCreate({ title: 'blap' }),
   }
 
   render() {
@@ -27,9 +36,8 @@ class DashboardContainer extends React.Component {
           buttonText='create category'
           onComplete={ this.props.categoryCreate } />
         { this.props.categories.map((item) =>
-          <div key={item.id}>
-            <h3> { item.title } </h3>
-          </div>
+
+          <CategoryItem key={item.id} category={ item } />
         )}
       </main>
     )
@@ -40,7 +48,7 @@ class DashboardContainer extends React.Component {
 const mapStateToProps = (state) => {
   //whatever we map here gets returned as props
   return {
-    categories: state,
+    categories: state.categorys,
   }
 }
 
@@ -51,11 +59,32 @@ const mapStateToProps = (state) => {
 //mapDispatchToProps gives us access to dispatch and then we can create methods to be this.props.methodName (categoryCreate, categoryUpdate, categoryDelete). these are seen in our this.props.categoryCreate in our componentDidMount
 const mapDispatchToProps = (dispatch, getState) => {
   return {
-    categoryCreate: (category) => dispatch(categoryCreate(category)),
-    categoryUpdate: (category) => dispatch(categoryUpdate(category)),
-    categoryDelete: (category) => dispatch(categoryDelete(category)),
+    categoryCreate: (category) => dispatch(categoryActionCreate(category)),
+    categoryUpdate: (category) => dispatch(categoryActionUpdate(category)),
+    categoryDelete: (category) => dispatch(categoryActionDelete(category)),
   }
 }
 
 //we use connect method to allow DashboardContainer to consume mapStateToProps and mapDispatchToProps
-export default connect( mapStateToProps, mapDispatchToProps )(DashboardContainer);
+//connect takes in a Component and binds default props to it
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DashboardContainer);
+
+// NOTE: can be written like this:
+// --------------------------
+// let bindToStore = connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )
+//
+// DashboardContainer = bindToStore(DashboardContainer)
+//
+// export default DashboardContainer;
+//------------------------------
+
+
+//this is kinda like redux
+// let bindPropsToComponent = (props, Component) => return new Component(props);
+// let ExampleDashboard = bindPropsToComponent( { someDefaultProperty: 'SomeDefaultValue' }, DashboardContainer);
