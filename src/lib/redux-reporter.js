@@ -1,3 +1,5 @@
+//reporter is a type of middleware
+
 //if crash, report errors
 //reporter takes in 3 functions as arguments that are curried and composible
 // let reporter (store, next, action) => {
@@ -16,7 +18,7 @@ let reporter = store => next => action => {
     console.log('__STATE__', store.getState())
     return result;
   } catch( error ) {
-    error.action = error;
+    error.action = action;
     console.error('__ERROR__', error)
     return error;
   }
