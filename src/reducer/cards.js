@@ -57,7 +57,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         [categoryID]: categoryCards.filter(card =>
-        card.id !== payload.id ? payload : card),
+        card.id !== payload.id),
       }
 
 
