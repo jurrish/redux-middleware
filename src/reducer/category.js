@@ -5,7 +5,7 @@
 //keep the reducer PURE - don't call impure functions (ie - Date.now() or Math.random())
 let validatePayload = (payload) => {
   if(!payload.id || !payload.title || !payload.timestamp)
-    throw new Error('VALIDATION ERROR: category must have id, title and timestamp');
+    throw new Error('VALIDATION ERROR: payload should have id, title, and timestamp');
 }
 
 let initialState = []

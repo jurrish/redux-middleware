@@ -15,7 +15,11 @@ describe('testing category reducer', () => {
   test('CATEGORY_CREATE should append to the array', () => {
     let action = {
       type: 'CATEGORY_CREATE',
-      payload: 'hello world',
+      payload: {
+        id: '123',
+        title: 'cool beans',
+        timestamp: new Date(),
+      },
     }
 
     let testState = categoryReducer([], action)
@@ -25,7 +29,11 @@ describe('testing category reducer', () => {
 
     let actionTwo = {
       type: 'CATEGORY_CREATE',
-      payload: 'goodbye world'
+      payload: {
+        id: '123',
+        title: 'cool beans',
+        timestamp: new Date(),
+      },
     }
 
     testState = categoryReducer(testState, actionTwo)
@@ -38,10 +46,10 @@ describe('testing category reducer', () => {
   test('CATEGORY_DELETE should delete an item from the state array', () => {
     let mockState =
     [
-      { id: '1', title: 'cool' },
-      { id: '2', title: 'beans' },
-      { id: '3', title: 'bro' },
-      { id: '4', title: 'suff' },
+      { id: '1', title: 'cool', timestamp: new Date() },
+      { id: '2', title: 'beans', timestamp: new Date() },
+      { id: '3', title: 'bro', timestamp: new Date() },
+      { id: '4', title: 'suff', timestamp: new Date() },
     ]
 
     let actionOne = {
@@ -59,15 +67,15 @@ describe('testing category reducer', () => {
   test('CATEGORY_UPDATE should update an existing item in the state array', () => {
     let mockState =
     [
-      { id: '1', title: 'cool' },
-      { id: '2', title: 'beans' },
-      { id: '3', title: 'bro' },
-      { id: '4', title: 'suff' },
+      { id: '1', title: 'cool', timestamp: new Date() },
+      { id: '2', title: 'beans', timestamp: new Date() },
+      { id: '3', title: 'bro', timestamp: new Date() },
+      { id: '4', title: 'suff', timestamp: new Date() },
     ]
 
     let actionOne = {
       type: 'CATEGORY_UPDATE',
-      payload: { id: '3', title: 'hax' }
+      payload: { id: '3', title: 'hax', timestamp: new Date() }
     }
 
     let state = categoryReducer(mockState, actionOne)
@@ -76,4 +84,22 @@ describe('testing category reducer', () => {
     expect(state).toEqual(mockState.map(item =>
     item.id == '3' ? actionOne.payload : item ))
   })
+
+//validation testing
+  test('CATEGORY_UPDATE should throw an error if id, title, or timestamp are missing', () => {
+    let mockState =
+    [
+      { id: '1', title: 'cool', timestamp: new Date() },
+    ]
+
+    let actionOne = {
+      type: 'CATEGORY_UPDATE',
+      payload: { id: '3', timestamp: new Date() }
+    }
+
+    expect(() => categoryReducer(mockState, actionOne))
+      .toThrow('VALIDATION ERROR: payload should have id, title, and timestamp')
+
+  })
+
 })
