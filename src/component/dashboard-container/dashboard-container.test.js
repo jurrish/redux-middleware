@@ -18,6 +18,7 @@ describe('dashboard-container', () => {
     let mockStore = createAppStore()
     let wrapper = shallow( <DashboardContainer store={mockStore} /> );
 
+// checking for access to the store.
     let verify = wrapper.props().categoryCreate({title: 'cool'})
     console.log('HERE =========', verify.payload.title);
     expect(verify.payload.title).toEqual('cool');
